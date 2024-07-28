@@ -10,7 +10,7 @@ interface DecodedToken {
 }
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req.cookies;
+    const token = req.headers['authorization']
 
     if (!token) {
         return res.status(404).json({
@@ -22,7 +22,9 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
 
+        console.log('decodeddd', decoded)
         const user = await User.findById(decoded._id).exec();
+        console.log('userrrr', user)
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -34,6 +36,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
 
         next();
     } catch (error) {
+        console.log('errorrrr', error)
         return res.status(401).json({
             success: false,
             message: "Invalid Token",

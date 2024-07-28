@@ -16,16 +16,25 @@ exports.isAuthenticated = void 0;
 const user_1 = require("../models/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token } = req.cookies;
-    if (!token) {
+    const token = req.headers['authorization'];
+    if (!token || token === null) {
         return res.status(404).json({
             success: false,
             message: "Login First",
         });
     }
     try {
+        console.log('tokennn', token);
+        if (token === null) {
+            return res.status(404).json({
+                success: false,
+                message: "Login First",
+            });
+        }
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        console.log('decodeddd', decoded);
         const user = yield user_1.User.findById(decoded._id).exec();
+        console.log('userrrr', user);
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -36,6 +45,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         next();
     }
     catch (error) {
+        console.log('errorrrr', error);
         return res.status(401).json({
             success: false,
             message: "Invalid Token",

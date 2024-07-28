@@ -14,7 +14,11 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173', // Replace with your front-end URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}));
 app.use((0, cookie_parser_1.default)());
 (0, db_1.connectDB)();
 app.use("/api", routes_1.default);
