@@ -1,8 +1,9 @@
 import mongoose, { Schema, Document, ObjectId } from 'mongoose';
 
 export interface IBook extends Document {
-    // _id: ObjectId;
-    _id: mongoose.Types.ObjectId;
+    _id: ObjectId;
+    // _id: mongoose.Types.ObjectId;
+    userId: mongoose.Types.ObjectId;
     bookName: string;
     bookId: string;
     bookAuthor: string;
@@ -12,6 +13,11 @@ export interface IBook extends Document {
 }
 
 const BookReviewSchema: Schema = new Schema({
+    userId: { 
+        type: mongoose.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    },
     bookName: {
         type: String,
         required: true,

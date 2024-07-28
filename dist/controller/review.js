@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateReview = exports.AddReview = void 0;
+exports.DeleteReview = exports.UpdateReview = exports.GetAllReviews = exports.GetMyReviews = exports.AddReview = void 0;
 const features_1 = require("../utils/features");
 const book_1 = require("../models/book");
 const AddReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -19,9 +19,7 @@ const AddReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             return res.send({ success: false, message: "Empty (No data entered)" });
         }
         let bookReview = new book_1.BookReview(body);
-        console.log("*** bookReview *** ", bookReview);
         bookReview.save();
-        console.log("*** bookReview 1 *** ", bookReview);
         (0, features_1.sendCookie)(bookReview.toJSON(), res, "Book Review Added Successfully", 201);
     }
     catch (error) {
@@ -29,26 +27,73 @@ const AddReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.AddReview = AddReview;
-const UpdateReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const GetMyReviews = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { body, params: { id } } = req;
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data entered)" });
+        }
+        const myBookReview = yield book_1.BookReview.find({ userId: id });
+        if (!myBookReview) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+        //   sendCookie(myBookReview.toJSON(), res, "Your Book Review(s) Fetched Successfully", 201);
+        res.status(201).json({ success: true, message: "Your Books Review Fetched Successfully!", data: myBookReview });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.GetMyReviews = GetMyReviews;
+const GetAllReviews = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { body } = req;
         if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data entered)" });
+        }
+        const allBookReviews = yield book_1.BookReview.find({});
+        console.log(">>>> all book reviews <<<<", allBookReviews);
+        if (!allBookReviews) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+        res.status(201).json({ success: true, message: "All Books Review Fetched Successfully!", data: allBookReviews });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.GetAllReviews = GetAllReviews;
+const UpdateReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { params: { id } } = req;
+        if (!req.body) {
             return res.send({ success: false, message: "Empty (No data provided)" });
         }
-        console.log('reqqqq...', req);
-        // //   const updatedReview = await BookReview.findByIdAndUpdate(
-        //   const updatedReview = await BookReview.findByIdAndUpdate(
-        //     req.body._id,
-        //     req.body
-        //   );
-        //   if (!updatedReview) {
-        //     return res.status(404).send({ success: false, message: "Review not found" });
-        // }
-        //   sendCookie(updatedReview.toJSON(), res, "Book Review Updated Successfully", 201);
-        res.json({ let: "seee" });
+        const updatedReview = yield book_1.BookReview.findByIdAndUpdate(id, req.body);
+        if (!updatedReview) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+        (0, features_1.sendCookie)(updatedReview.toJSON(), res, "Book Review Updated Successfully", 201);
     }
     catch (error) {
         next(error);
     }
 });
 exports.UpdateReview = UpdateReview;
+const DeleteReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { params: { id } } = req;
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data provided)" });
+        }
+        const deletedBookReview = yield book_1.BookReview.findByIdAndDelete(id);
+        if (!deletedBookReview) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+        (0, features_1.sendCookie)(deletedBookReview.toJSON(), res, "Book Review Deleted Successfully", 201);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.DeleteReview = DeleteReview;
