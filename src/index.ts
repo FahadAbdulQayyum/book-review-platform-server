@@ -1,3 +1,5 @@
+// url for this server: https://book-review-platform-server-b10yqe5c8.vercel.app
+
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
