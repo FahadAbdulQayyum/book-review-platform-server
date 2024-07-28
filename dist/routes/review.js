@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const review_1 = require("../controller/review");
 const auth_1 = require("../middlewares/auth");
-// router.get('/getreview',isAuthenticated, getMyProfile)
 router.post('/addreview', auth_1.isAuthenticated, review_1.AddReview);
-router.post('/updatereview/:id', auth_1.isAuthenticated, review_1.AddReview);
+router.put('/updatereview/:id', auth_1.isAuthenticated, review_1.UpdateReview);
 exports.default = router;
