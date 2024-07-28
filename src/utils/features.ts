@@ -27,6 +27,7 @@ export const sendCookie = (user: User, res: Response, message:string, statusCode
         .json({
             success: true,
             message,
-            user: user
+            user: user,
+            token
         });
 };
