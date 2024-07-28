@@ -1,13 +1,14 @@
-const express = require('express');
+import express from 'express';
+import cors from 'cors';
+import { mongoose } from './config';
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const cors = require('cors');
-// const { mongoose } = require('./config');
 
-// app.use(express.json());
-// app.use(cors());
+app.use(express.json());
+app.use(cors());
 
 // const db = mongoose.connection;
 
