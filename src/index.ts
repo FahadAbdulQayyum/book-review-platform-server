@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-// import cors from "cors";
+import cors from "cors";
+
+import Routes from './routes'
 
 dotenv.config();
 
@@ -10,7 +12,7 @@ const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 
 const db = mongoose.connection;
 
@@ -22,6 +24,8 @@ db.on('open', async () => {
     console.log('Db is running!')
 });
 
+
+app.use("/api", Routes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Express + TypeScript Server");

@@ -13,26 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const cors_1 = __importDefault(require("cors"));
-const routes_1 = __importDefault(require("./routes"));
-dotenv_1.default.config();
-const mongoose_1 = __importDefault(require("mongoose"));
-const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3000;
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-const db = mongoose_1.default.connection;
-db.on('error', (err) => {
-    console.log('err', err);
-});
-db.on('open', () => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Db is running!');
+const router = express_1.default.Router();
+router.use('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        (_a = res === null || res === void 0 ? void 0 : res.status(200)) === null || _a === void 0 ? void 0 : _a.json("Crazy People!");
+    }
+    catch (err) {
+    }
 }));
-app.use("/api", routes_1.default);
-app.get("/", (req, res) => {
-    res.send("Express + TypeScript Server");
-});
-app.listen(PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${PORT}`);
-});
+exports.default = router;
