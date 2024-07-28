@@ -1,13 +1,9 @@
 import express, { Express, Request, Response } from "express";
-
 const router = express.Router();
+import {Login} from "../controller/user"
 
-router.use('/', async (req: Request, res: Response) => {
-    try {
-        res?.status(200)?.json("Crazy People!");
-    } catch (err) {
+router.post('/login', Login)
+// router.get('/login', Login)
 
-    }
-});
 
 export default router;
