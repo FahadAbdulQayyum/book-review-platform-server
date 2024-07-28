@@ -1,5 +1,5 @@
 "use strict";
-// url for this server: https://book-review-platform-server-b10yqe5c8.vercel.app
+// url for this server: https://book-review-platform-server.vercel.app
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
