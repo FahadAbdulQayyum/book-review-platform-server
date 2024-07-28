@@ -1,31 +1,32 @@
-import express from 'express';
-import cors from 'cors';
-import { mongoose } from './config';
+import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
+// import cors from "cors";
 
+dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 4000;
+import mongoose from "mongoose"
 
+const app: Express = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 
-// const db = mongoose.connection;
+const db = mongoose.connection;
 
-// db.on('error', (err) => {
-//     console.log('err', err);
-// });
+db.on('error', (err) => {
+    console.log('err', err);
+});
 
-// db.on('open', async () => {
-//     console.log('Db is running!')
-// });
+db.on('open', async () => {
+    console.log('Db is running!')
+});
 
-// app.get('/', (req, res) => {
-//     res.send(`Running on Port ${PORT}`)
-// })
 
-// app.use('/', require('./routes'))
+app.get("/", (req: Request, res: Response) => {
+    res.send("Express + TypeScript Server");
+});
 
 app.listen(PORT, () => {
-    console.log(`Server is running on PORT: ${PORT}`);
-})
+    console.log(`[server]: Server is running at http://localhost:${PORT}`);
+});

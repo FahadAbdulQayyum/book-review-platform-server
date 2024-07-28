@@ -1,1 +1,2 @@
-export { mongoose } from './db';
+export const mongoose = require('./db');
+
