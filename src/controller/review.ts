@@ -2,9 +2,9 @@ import  { Request, Response, NextFunction } from "express";
 
 import { User } from "../models/user";
 import bcrypt from "bcrypt";
-// import { IIUser, sendCookie } from "../utils/features";
 import {  sendCookie } from "../utils/features";
 import ErrorHandler from "../middlewares/error";
+import { BookReview } from "../models/book";
 
 export const Login = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -27,22 +27,41 @@ export const Login = async (req: Request, res: Response, next: NextFunction) => 
     }
 };
 
-export const Register = async (req: Request, res: Response, next: NextFunction) => {
+export const AddReview = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, email, password } = req.body;
+        // const { bookname, bookid, bookauthor, reviewtext, bookrating } = req.body;
 
-        let user = await User.findOne({ email });
+        const {body} = req
 
-        // // if (user) return next(new ErrorHandler("User Already Exist", 400));
-        if (user) return res.json({ success: false, message: 'User already exists' });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data entered)" });
+          }
 
-        user = await User.create({ name, email, password: hashedPassword });
 
-        sendCookie(user.toJSON(), res, "Registered Successfully", 201);
+          let bookReview = new BookReview(body);
+          console.log("*** bookReview *** ", bookReview);
+          bookReview
+          .save()
+            // .then(() => {
+            //   console.log("****|||*****");
+            //   return res.json({
+            //     success: true,
+            //     message: "Book Review added successfully!",
+            //   });
+            // })
+        //     .catch((err) => console.log("err", err));
+        //   console.log("bodyy", body);
+        // } catch (err) {
+            //   res.status(500).json({ error: err.message });
+            // }
+            
+        console.log("*** bookReview 1 *** ", bookReview);
+        sendCookie(bookReview.toJSON(), res, "Book Review Added Successfully", 201);
 
-    } catch (error) {
+    } 
+
+catch (error) {
         next(error);
     }
 };

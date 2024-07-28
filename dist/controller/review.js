@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.getMyProfile = exports.Register = exports.Login = void 0;
+exports.logout = exports.getMyProfile = exports.AddReview = exports.Login = void 0;
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-// import { IIUser, sendCookie } from "../utils/features";
 const features_1 = require("../utils/features");
+const book_1 = require("../models/book");
 const Login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -35,22 +35,37 @@ const Login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.Login = Login;
-const Register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const AddReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, password } = req.body;
-        let user = yield user_1.User.findOne({ email });
-        // // if (user) return next(new ErrorHandler("User Already Exist", 400));
-        if (user)
-            return res.json({ success: false, message: 'User already exists' });
-        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        user = yield user_1.User.create({ name, email, password: hashedPassword });
-        (0, features_1.sendCookie)(user.toJSON(), res, "Registered Successfully", 201);
+        // const { bookname, bookid, bookauthor, reviewtext, bookrating } = req.body;
+        const { body } = req;
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data entered)" });
+        }
+        let bookReview = new book_1.BookReview(body);
+        console.log("*** bookReview *** ", bookReview);
+        bookReview
+            .save();
+        // .then(() => {
+        //   console.log("****|||*****");
+        //   return res.json({
+        //     success: true,
+        //     message: "Book Review added successfully!",
+        //   });
+        // })
+        //     .catch((err) => console.log("err", err));
+        //   console.log("bodyy", body);
+        // } catch (err) {
+        //   res.status(500).json({ error: err.message });
+        // }
+        console.log("*** bookReview 1 *** ", bookReview);
+        (0, features_1.sendCookie)(bookReview.toJSON(), res, "Book Review Added Successfully", 201);
     }
     catch (error) {
         next(error);
     }
 });
-exports.Register = Register;
+exports.AddReview = AddReview;
 const getMyProfile = (req, res) => {
     const { body } = req;
     res.status(200).json({
