@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendCookie = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const sendCookie = (user, res, message, statusCode = 200) => {
+    // export const sendCookie = (user: IIUser, res: Response, message:string, statusCode:number = 200) => {
     if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET is not defined in environment variables");
     }

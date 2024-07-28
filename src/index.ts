@@ -1,29 +1,22 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 
 import Routes from './routes'
 
-dotenv.config();
+import {connectDB} from './config/db'
 
-import mongoose from "mongoose"
+dotenv.config();
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
-const db = mongoose.connection;
-
-db.on('error', (err) => {
-    console.log('err', err);
-});
-
-db.on('open', async () => {
-    console.log('Db is running!')
-});
-
+connectDB()
 
 app.use("/api", Routes);
 

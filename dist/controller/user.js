@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.getMyProfile = exports.Register = exports.Login = void 0;
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+// import { IIUser, sendCookie } from "../utils/features";
+const features_1 = require("../utils/features");
 const Login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -26,24 +28,23 @@ const Login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         if (!isMatch)
             return res.json({ success: false, message: 'Invalid Email or Password' });
         // return next(new ErrorHandler("Invalid Email or Password", 400));
-        // sendCookie(user, res, `Welcome back, ${user.name}`, 200);
+        (0, features_1.sendCookie)(user.toJSON(), res, `Welcome back, ${user.name}`, 200);
     }
     catch (error) {
         next(error);
     }
 });
 exports.Login = Login;
-// export const register = async (req, res) => {
 const Register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password } = req.body;
-        // let user = await User.findOne({ email });
+        let user = yield user_1.User.findOne({ email });
         // // if (user) return next(new ErrorHandler("User Already Exist", 400));
-        // if (user) return res.json({ success: false, message: 'User already exists' });
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        // user = await User.create({ name, email, password: hashedPassword });
-        // sendCookie(user, res, "Registered Successfully", 201);
-        return res.json({ success: true, data: req.body });
+        if (user)
+            return res.json({ success: false, message: 'User already exists' });
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        user = yield user_1.User.create({ name, email, password: hashedPassword });
+        (0, features_1.sendCookie)(user.toJSON(), res, "Registered Successfully", 201);
     }
     catch (error) {
         next(error);
@@ -60,14 +61,14 @@ exports.getMyProfile = getMyProfile;
 const logout = (req, res) => {
     res
         .status(200)
-        .cookie("token", "", {
-        expires: new Date(Date.now()),
-        sameSite: process.env.NODE_ENV === "Develpoment" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Develpoment" ? false : true,
+        .clearCookie("token", {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+        secure: process.env.NODE_ENV === "Development" ? false : true,
     })
         .json({
         success: true,
-        // user: req.user,
+        message: "Logged out successfully"
     });
 };
 exports.logout = logout;

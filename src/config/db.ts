@@ -1,7 +1,27 @@
 import mongoose from "mongoose"
 
-let driverURL: string = process.env.REACT_APP_DB_URL || ''
 
-mongoose.connect(driverURL);
+export const connectDB = () => {
+    mongoose
+        .connect(process.env.DB_URL||'', {
+            dbName: "backendapi",
+        })
+        .then((c) => console.log(`Database Connected with ${c.connection.host}`))
+        .catch((e) => console.log(e));
 
-export {mongoose}
+    // mongoose.connect(
+    //     process.env.MONGO_URI, { dbName: "backendapi1" },
+    //     { useNewUrlParser: true, useUnifiedTopology: true },
+    //     () => {
+    //         console.log('Connected to MongoDB');
+    //     }
+    // );
+};
+
+// let driverURL: string = process.env.DB_URL || ''
+
+// console.log('********')
+
+// mongoose.connect(driverURL);
+
+// export {mongoose}
