@@ -52,9 +52,10 @@ const Register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.Register = Register;
 const getMyProfile = (req, res) => {
+    const { body } = req;
     res.status(200).json({
         success: true,
-        // user: req.user,
+        user: body.user,
     });
 };
 exports.getMyProfile = getMyProfile;

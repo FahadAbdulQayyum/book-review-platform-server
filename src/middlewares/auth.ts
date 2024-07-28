@@ -11,7 +11,7 @@ interface DecodedToken {
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.cookies;
-console.log('HHHEEEELLLLOOOO')
+
     if (!token) {
         return res.status(404).json({
             success: false,
@@ -30,10 +30,8 @@ console.log('HHHEEEELLLLOOOO')
             });
         }
 
-        // req.user = user as any;
-        // req.user = user as IIUser;
-        req.user = user as IUser;
-        
+        req.body.user = user;
+
         next();
     } catch (error) {
         return res.status(401).json({

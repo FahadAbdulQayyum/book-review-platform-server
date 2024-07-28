@@ -17,7 +17,6 @@ const user_1 = require("../models/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.cookies;
-    console.log('HHHEEEELLLLOOOO');
     if (!token) {
         return res.status(404).json({
             success: false,
@@ -33,9 +32,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 message: "User not found",
             });
         }
-        // req.user = user as any;
-        // req.user = user as IIUser;
-        req.user = user;
+        req.body.user = user;
         next();
     }
     catch (error) {

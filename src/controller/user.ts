@@ -48,9 +48,12 @@ export const Register = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const getMyProfile = (req: Request, res: Response) => {
+
+    const {body} = req 
+    
     res.status(200).json({
         success: true,
-        // user: req.user,
+        user: body.user,
     });
 };
 
