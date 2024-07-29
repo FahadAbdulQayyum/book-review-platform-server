@@ -7,7 +7,7 @@ router.post('/add', isAuthenticated, AddReview)
 router.put('/update/:id', isAuthenticated, UpdateReview)
 router.delete('/delete/:id', isAuthenticated, DeleteReview)
 router.get('/getmyreview/:id', isAuthenticated, GetMyReviews)
-router.get('/getallreviews', isAuthenticated, GetAllReviews)
+router.get('/getallreviews', GetAllReviews)
 
 
 export default router;
