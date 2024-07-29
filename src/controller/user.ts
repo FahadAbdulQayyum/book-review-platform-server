@@ -57,6 +57,31 @@ export const getMyProfile = (req: Request, res: Response) => {
     });
 };
 
+export const UpdateProfile = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('UpdateProfile called....')
+    try {
+        const {params:{id}} = req
+
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data provided)" });
+          }
+
+          const updatedProfile = await User.findByIdAndUpdate(
+            id,
+            req.body
+          );
+
+          if (!updatedProfile) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+
+          sendCookie(updatedProfile.toJSON(), res, "Profile Updated Successfully", 201);
+    } 
+catch (error) {
+        next(error);
+    }
+};
+
 export const logout = (req: Request, res: Response) => {
     res
         .status(200)

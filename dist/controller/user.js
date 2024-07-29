@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.getMyProfile = exports.Register = exports.Login = void 0;
+exports.logout = exports.UpdateProfile = exports.getMyProfile = exports.Register = exports.Login = void 0;
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 // import { IIUser, sendCookie } from "../utils/features";
@@ -59,6 +59,24 @@ const getMyProfile = (req, res) => {
     });
 };
 exports.getMyProfile = getMyProfile;
+const UpdateProfile = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('UpdateProfile called....');
+    try {
+        const { params: { id } } = req;
+        if (!req.body) {
+            return res.send({ success: false, message: "Empty (No data provided)" });
+        }
+        const updatedProfile = yield user_1.User.findByIdAndUpdate(id, req.body);
+        if (!updatedProfile) {
+            return res.status(404).send({ success: false, message: "Review not found" });
+        }
+        (0, features_1.sendCookie)(updatedProfile.toJSON(), res, "Profile Updated Successfully", 201);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.UpdateProfile = UpdateProfile;
 const logout = (req, res) => {
     res
         .status(200)

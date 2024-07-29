@@ -10,5 +10,5 @@ const auth_1 = require("../middlewares/auth");
 router.get('/auth', auth_1.isAuthenticated, user_1.getMyProfile);
 router.post('/login', user_1.Login);
 router.post('/signup', user_1.Register);
-// router.get('/login', Login)
+router.put('/update/:id', auth_1.isAuthenticated, user_1.UpdateProfile);
 exports.default = router;
