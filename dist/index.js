@@ -1,5 +1,5 @@
 "use strict";
-// url for this server: https://book-review-platform-server.vercel.app
+// // url for this server: https://book-review-platform-server.vercel.app
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -13,12 +13,14 @@ const db_1 = require("./config/db");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
-app.use(express_1.default.json());
+// Use CORS middleware before other middleware and routes
 app.use((0, cors_1.default)({
+    // origin: 'https://book-review-platform-gold.vercel.app', // Replace with your front-end URL
     origin: 'http://localhost:5173', // Replace with your front-end URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
+app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 (0, db_1.connectDB)();
 app.use("/api", routes_1.default);
@@ -28,3 +30,34 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
 });
+// import express, { Express, Request, Response } from "express";
+// import dotenv from "dotenv";
+// import cors from "cors";
+// import cookieParser from 'cookie-parser';
+// import Routes from './routes'
+// import {connectDB} from './config/db'
+// dotenv.config();
+// const app: Express = express();
+// const PORT = process.env.PORT || 3000;
+// app.use(express.json());
+// // app.use(cors({
+// //     // origin: 'http://localhost:5173', // Replace with your front-end URL
+// //     origin: 'https://book-review-platform-gold.vercel.app', // Replace with your front-end URL
+// //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+// //     credentials: true,
+// // }));
+// app.options('*',cors({
+//     // origin: 'http://localhost:5173', // Replace with your front-end URL
+//     origin: 'https://book-review-platform-gold.vercel.app', // Replace with your front-end URL
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     credentials: true,
+// }));
+// app.use(cookieParser());
+// connectDB()
+// app.use("/api", Routes);
+// app.get("/", (req: Request, res: Response) => {
+//     res.send("Express + TypeScript Server");
+// });
+// app.listen(PORT, () => {
+//     console.log(`[server]: Server is running at http://localhost:${PORT}`);
+// });
