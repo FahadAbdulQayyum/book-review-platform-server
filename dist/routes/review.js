@@ -11,5 +11,5 @@ router.post('/add', auth_1.isAuthenticated, review_1.AddReview);
 router.put('/update/:id', auth_1.isAuthenticated, review_1.UpdateReview);
 router.delete('/delete/:id', auth_1.isAuthenticated, review_1.DeleteReview);
 router.get('/getmyreview/:id', auth_1.isAuthenticated, review_1.GetMyReviews);
-router.get('/getallreviews', auth_1.isAuthenticated, review_1.GetAllReviews);
+router.get('/getallreviews', review_1.GetAllReviews);
 exports.default = router;
